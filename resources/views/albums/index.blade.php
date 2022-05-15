@@ -31,7 +31,6 @@
                                 <th class="text-center">Pictures Count</th>
                                 <th class="text-center">Edit</th>
                                 <th class="text-center">Delete</th>
-                                <th class="text-center">Move Pictures Before</th>
                             </thead>
                             <tbody>
                                 @php $i=0; @endphp
@@ -44,9 +43,6 @@
                                     <td class="text-center">
                                         <a href="{{url('album-edit/'.$album->id)}}" class="btn btn-info btn-sm">EDIT</a>
                                     </td>
-                                    <td class="text-center">
-                                        <a href="{{url('album-delete/'.$album->id)}}" class="btn btn-danger btn-sm">DELETE</a>
-                                    </td>
 
 
                                     <?php
@@ -56,23 +52,51 @@
                                     ?>
 
                                             <td class="text-center">
-                                                <form action="/album-move/{{$album->id}}" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" name="name" value="{{$album->name}}">
-                                                    <input type="hidden" name="image" value="{{$album->image}}">
-                                                    <select name="album_id" class="form-control">
-                                                        @foreach($albums as $album)
-                                                        <option value="{{$album->id}}">{{$album->name}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    <button type="submit" class="btn btn-danger btn-sm">Move And Delete</button>
-                                                </form>
+                                                <!-- Button trigger modal -->
+                                                <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#exampleModal">CHOOSE</button>
+
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Choose Your Choice</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <form action="/album-move/{{$album->id}}" method="POST">
+                                                                <div class="modal-body">
+                                                                    @csrf
+                                                                    <label>Before Deleting Move Pictures To</label>
+                                                                    <select name="album_id" class="form-control">
+                                                                        @foreach($albums as $album)
+                                                                        <option value="{{$album->id}}">{{$album->name}}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <a href="{{url('album-delete/'.$album->id)}}" type="button" class="btn btn-danger" style="float:right;">Delete Without Moving</a>
+                                                                    <button type="submit" class="btn btn-success m-2">Move And Delete</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
 
                                     <?php
                                         }
+                                        else
+                                        {
+                                    ?>
+                                            <td class="text-center">
+                                                <a href="{{url('album-delete/'.$album->id)}}" class="btn btn-danger btn-sm">DELETE</a>
+                                            </td>
 
-                                        ?>
+                                    <?php
+                                        }
+                                    ?>
                                 </tr>
                                 @endforeach
                             </tbody>
